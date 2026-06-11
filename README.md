@@ -46,5 +46,6 @@ Dans le `package.json` du client :
 
 ## Migration des clients existants
 
-- `ktkarena-web` : consomme déjà ce package (jour 1).
-- `ktkarena-admin` et `ktkarena-mobile` : migration progressive — remplacer la copie locale de `contracts.ts` par un import `@ktk/contracts` lors d'une prochaine release. Non urgent, non bloquant.
+- `ktkarena-web` : consomme déjà ce package via `file:../ktkarena-contracts` (jour 1).
+- `ktkarena-admin` : peut utiliser `file:` en local, mais préférer la dépendance git dès que le repo est poussé (les builds Vercel n'uploadent que le repo).
+- `ktkarena-mobile` : ⚠️ **NE PAS utiliser `file:../`** — les builds EAS cloud n'uploadent que le repo, une dépendance vers un dossier frère casse le build (vérifié juin 2026, fix/wallet-types-pagination). Deux options : dépendance **git** (`github:<org>/ktkarena-contracts#vX.Y.Z`, fonctionne sur EAS car npm la résout au install), ou conserver une copie vendorée locale synchronisée par script avec commentaire pointant vers la source de vérité (état actuel de `types/wallet.ts`).
