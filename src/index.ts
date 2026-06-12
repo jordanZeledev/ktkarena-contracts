@@ -606,6 +606,8 @@ export const WsClientEvent = {
   JOIN_MATCH: 'join:match',
   LEAVE_MATCH: 'leave:match',
   PING: 'ping',
+  ODDS_LOBBY_JOIN: 'odds_lobby:join',
+  ODDS_LOBBY_LEAVE: 'odds_lobby:leave',
   SEND_CHAT_MESSAGE: 'event_chat:send',
   TOGGLE_CHAT_REACTION: 'event_chat:toggle_reaction',
   CHAT_TYPING: 'event_chat:typing',

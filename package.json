@@ -1,6 +1,6 @@
 {
   "name": "@ktk/contracts",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Shared enums and types between ktkarena-api and all KTKArena clients (mobile, admin, web). Auto-generated from prisma/schema.prisma.",
   "type": "module",
   "main": "./dist/index.js",
