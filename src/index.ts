@@ -1,5 +1,6 @@
 // AUTO-GENERATED FILE — DO NOT EDIT.
-// Source: ktkarena-api/prisma/schema.prisma
+// Sources: ktkarena-api/prisma/schema.prisma
+//        + ktkarena-api/src/modules/websocket/websocket.types.ts
 // Regeneration flow: in ktkarena-api run `npm run generate:contracts`,
 // then sync the output here (see README.md — a sync script should copy
 // ktkarena-api/src/shared/contracts.ts into this file and bump the version).
@@ -524,3 +525,104 @@ export const WebhookSeverityThreshold = {
 } as const;
 export type WebhookSeverityThreshold =
   (typeof WebhookSeverityThreshold)[keyof typeof WebhookSeverityThreshold];
+
+// === WebSocket (Socket.IO) — noms d’événements ===
+// Source: src/modules/websocket/websocket.types.ts.
+// Les clients DOIVENT référencer ces constantes — jamais de littéraux.
+// Canal de cotes live : le nom canonique est WsEvent.EVENT_ODDS_UPDATE
+// ('event:odds_update').
+
+export const WsEvent = {
+  NOTIFICATION_NEW: 'notification:new',
+  NOTIFICATION_COUNT: 'notification:count',
+  BET_MATCHED: 'bet:matched',
+  BET_STATUS_CHANGED: 'bet:status_changed',
+  CHAT_MESSAGE: 'chat:message',
+  CHAT_REACTION: 'chat:reaction',
+  EVENT_ODDS_UPDATE: 'event:odds_update',
+  EVENT_RESOLVED: 'event:resolved',
+  EVENT_NEW: 'event:new',
+  EVENT_STATUS_CHANGED: 'event:status_changed',
+  EVENT_POOL_PHASE_IMMINENT: 'event:pool_phase_imminent',
+  EVENT_POOL_PHASE_STARTED: 'event:pool_phase_started',
+  EVENT_POOL_PHASE_COMPLETED: 'event:pool_phase_completed',
+  EVENT_BETTING_LOCKED: 'event:betting_locked',
+  BET_POOL_PHASE_ACCEPTED: 'bet:pool_phase_accepted',
+  BET_POOL_PHASE_REFUNDED: 'bet:pool_phase_refunded',
+  WALLET_BALANCE_UPDATE: 'wallet:balance_update',
+  XP_GAINED: 'xp:gained',
+  ACHIEVEMENT_UNLOCKED: 'achievement:unlocked',
+  LEADERBOARD_UPDATE: 'leaderboard:update',
+  EVENT_CHAT_MESSAGE: 'event_chat:message',
+  EVENT_CHAT_REACTION: 'event_chat:reaction',
+  EVENT_CHAT_ONLINE_COUNT: 'event_chat:online_count',
+  EVENT_CHAT_TYPING: 'event_chat:typing',
+  EVENT_CHAT_HISTORY: 'event_chat:history',
+  EVENT_CHAT_ERROR: 'event_chat:error',
+  EVENT_CHAT_RESOLVED: 'event_chat:resolved',
+  EVENT_CHAT_MOMENTUM: 'event_chat:momentum',
+  EVENT_CHAT_BET_TICKER: 'event_chat:bet_ticker',
+  EVENT_CHAT_MILESTONE: 'event_chat:milestone',
+  DM_MESSAGE: 'dm:message',
+  DM_MESSAGE_DELETED: 'dm:message_deleted',
+  DM_MESSAGE_UPDATED: 'dm:message_updated',
+  DM_READ: 'dm:read',
+  DM_TYPING: 'dm:typing',
+  DM_DELIVERED: 'dm:delivered',
+  DM_MESSAGE_REACTION: 'dm:message_reaction',
+  DM_MESSAGE_TRANSCRIBED: 'dm:message_transcribed',
+  DM_CONVERSATION_UPDATED: 'dm:conversation_updated',
+  DM_UNREAD_COUNT: 'dm:unread_count',
+  SSTK_CONVERSION_COMPLETE: 'sstk:conversion_complete',
+  SSTK_CONVERSION_FAILED: 'sstk:conversion_failed',
+  FEED_NEW_POST: 'feed:new_post',
+  FEED_REACTION: 'feed:reaction',
+  FEED_COMMENT: 'feed:comment',
+  GROUP_MESSAGE: 'group:message',
+  GROUP_MESSAGE_DELETED: 'group:message_deleted',
+  GROUP_MESSAGE_PINNED: 'group:message_pinned',
+  GROUP_MESSAGE_UNPINNED: 'group:message_unpinned',
+  GROUP_MESSAGE_REACTION: 'group:message_reaction',
+  GROUP_BET_PLACED: 'group:bet_placed',
+  GROUP_BET_RESOLVED: 'group:bet_resolved',
+  GROUP_MEMBER_JOINED: 'group:member_joined',
+  GROUP_MEMBER_LEFT: 'group:member_left',
+  GROUP_READ: 'group:read',
+  CALL_INCOMING: 'call:incoming',
+  CALL_RINGING: 'call:ringing',
+  CALL_ACCEPTED: 'call:accepted',
+  CALL_REJECTED: 'call:rejected',
+  CALL_ENDED: 'call:ended',
+  CALL_ERROR: 'call:error',
+  CALL_OFFER: 'call:offer',
+  CALL_ANSWER: 'call:answer',
+  CALL_ICE_CANDIDATE: 'call:ice-candidate',
+} as const;
+export type WsEvent = (typeof WsEvent)[keyof typeof WsEvent];
+
+export const WsClientEvent = {
+  JOIN_EVENT: 'join:event',
+  LEAVE_EVENT: 'leave:event',
+  JOIN_MATCH: 'join:match',
+  LEAVE_MATCH: 'leave:match',
+  PING: 'ping',
+  SEND_CHAT_MESSAGE: 'event_chat:send',
+  TOGGLE_CHAT_REACTION: 'event_chat:toggle_reaction',
+  CHAT_TYPING: 'event_chat:typing',
+  DM_SEND: 'dm:send',
+  DM_READ: 'dm:read',
+  DM_TYPING: 'dm:typing',
+  DM_DELIVERED: 'dm:delivered',
+  CALL_INITIATE: 'call:initiate',
+  CALL_ACCEPT: 'call:accept',
+  CALL_REJECT: 'call:reject',
+  CALL_HANGUP: 'call:hangup',
+  CALL_OFFER: 'call:offer',
+  CALL_ANSWER: 'call:answer',
+  CALL_ICE_CANDIDATE: 'call:ice-candidate',
+} as const;
+export type WsClientEvent = (typeof WsClientEvent)[keyof typeof WsClientEvent];
+
+/** @deprecated Alias de compat émis en doublon du nom canonique —
+ * ne pas utiliser pour du neuf. Retrait suivi dans DEPRECATION.md. */
+export const WS_LEGACY_ODDS_UPDATE = 'odds:update';
