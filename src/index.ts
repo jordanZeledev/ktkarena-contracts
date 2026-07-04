@@ -338,6 +338,11 @@ export const PoolAcceptance = {
 export type PoolAcceptance =
   (typeof PoolAcceptance)[keyof typeof PoolAcceptance];
 
+export const OAuthProvider = {
+  GOOGLE: 'GOOGLE',
+} as const;
+export type OAuthProvider = (typeof OAuthProvider)[keyof typeof OAuthProvider];
+
 export const XPReason = {
   BET_PLACED: 'BET_PLACED',
   BET_WON: 'BET_WON',
@@ -426,6 +431,7 @@ export const GroupMessageType = {
   VOICE_MESSAGE: 'VOICE_MESSAGE',
   EVENT_SHARE: 'EVENT_SHARE',
   SONIC_STICKER: 'SONIC_STICKER',
+  CHALLENGE: 'CHALLENGE',
 } as const;
 export type GroupMessageType =
   (typeof GroupMessageType)[keyof typeof GroupMessageType];
@@ -480,6 +486,15 @@ export const SonicStickerReportStatus = {
 export type SonicStickerReportStatus =
   (typeof SonicStickerReportStatus)[keyof typeof SonicStickerReportStatus];
 
+export const SonicStickerPackStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_REVIEW: 'PENDING_REVIEW',
+  PUBLISHED: 'PUBLISHED',
+  REJECTED: 'REJECTED',
+} as const;
+export type SonicStickerPackStatus =
+  (typeof SonicStickerPackStatus)[keyof typeof SonicStickerPackStatus];
+
 export const FeedPostType = {
   PRONOSTIC: 'PRONOSTIC',
   BET_HIGHLIGHT: 'BET_HIGHLIGHT',
@@ -526,6 +541,27 @@ export const WebhookSeverityThreshold = {
 export type WebhookSeverityThreshold =
   (typeof WebhookSeverityThreshold)[keyof typeof WebhookSeverityThreshold];
 
+export const SeasonStatus = {
+  UPCOMING: 'UPCOMING',
+  ACTIVE: 'ACTIVE',
+  CLOSED: 'CLOSED',
+} as const;
+export type SeasonStatus = (typeof SeasonStatus)[keyof typeof SeasonStatus];
+
+export const SeasonRewardType = {
+  BADGE: 'BADGE',
+  FRAME: 'FRAME',
+} as const;
+export type SeasonRewardType =
+  (typeof SeasonRewardType)[keyof typeof SeasonRewardType];
+
+export const SeasonGrantVia = {
+  CLAIM: 'CLAIM',
+  AUTO: 'AUTO',
+} as const;
+export type SeasonGrantVia =
+  (typeof SeasonGrantVia)[keyof typeof SeasonGrantVia];
+
 // === WebSocket (Socket.IO) — noms d’événements ===
 // Source: src/modules/websocket/websocket.types.ts.
 // Les clients DOIVENT référencer ces constantes — jamais de littéraux.
@@ -533,6 +569,7 @@ export type WebhookSeverityThreshold =
 // ('event:odds_update').
 
 export const WsEvent = {
+  SESSION_REVOKED: 'session:revoked',
   NOTIFICATION_NEW: 'notification:new',
   NOTIFICATION_COUNT: 'notification:count',
   BET_MATCHED: 'bet:matched',
@@ -573,6 +610,8 @@ export const WsEvent = {
   DM_MESSAGE_TRANSCRIBED: 'dm:message_transcribed',
   DM_CONVERSATION_UPDATED: 'dm:conversation_updated',
   DM_UNREAD_COUNT: 'dm:unread_count',
+  PRESENCE_UPDATE: 'presence:update',
+  PRESENCE_SNAPSHOT: 'presence:snapshot',
   SSTK_CONVERSION_COMPLETE: 'sstk:conversion_complete',
   SSTK_CONVERSION_FAILED: 'sstk:conversion_failed',
   FEED_NEW_POST: 'feed:new_post',
@@ -583,6 +622,7 @@ export const WsEvent = {
   GROUP_MESSAGE_PINNED: 'group:message_pinned',
   GROUP_MESSAGE_UNPINNED: 'group:message_unpinned',
   GROUP_MESSAGE_REACTION: 'group:message_reaction',
+  GROUP_MESSAGE_TRANSCRIBED: 'group:message_transcribed',
   GROUP_BET_PLACED: 'group:bet_placed',
   GROUP_BET_RESOLVED: 'group:bet_resolved',
   GROUP_MEMBER_JOINED: 'group:member_joined',
