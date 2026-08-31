@@ -1,9 +1,18 @@
 // AUTO-GENERATED FILE — DO NOT EDIT.
-// Sources: ktkarena-api/prisma/schema.prisma
-//        + ktkarena-api/src/modules/websocket/websocket.types.ts
-// Regeneration flow: in ktkarena-api run `npm run generate:contracts`,
-// then sync the output here (see README.md — a sync script should copy
-// ktkarena-api/src/shared/contracts.ts into this file and bump the version).
+// Miroir de ktkarena-api/src/shared/contracts.ts (branche main).
+//
+// Sources amont : ktkarena-api/prisma/schema.prisma
+//               + ktkarena-api/src/modules/websocket/websocket.types.ts
+//               + ktkarena-api/src/shared/bet-origin.type.ts
+//
+// Flux de mise à jour : dans ktkarena-api, `npm run generate:contracts`, puis
+// synchroniser ici (voir README.md) et bumper la version de ce paquet.
+//
+// ⚠️ NE RIEN AJOUTER DE LOCAL SOUS CET EN-TÊTE. Le CORPS de ce fichier doit
+// rester identique à celui de contracts.ts : `npm run verify:receivable`
+// compare son empreinte à celle acquittée par
+// ktkarena-api/scripts/contracts-ledger.json, et le moindre symbole ajouté ici
+// la ferait diverger. Une constante propre au paquet va dans un autre fichier.
 export const UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -21,6 +30,7 @@ export const EventThematic = {
   CRYPTO: 'CRYPTO',
   SCIENCE_SPACE: 'SCIENCE_SPACE',
   CULTURE_SOCIETY: 'CULTURE_SOCIETY',
+  INSOLITE: 'INSOLITE',
 } as const;
 export type EventThematic = (typeof EventThematic)[keyof typeof EventThematic];
 
@@ -52,6 +62,12 @@ export const QuestionType = {
   QUALIFIED: 'QUALIFIED',
 } as const;
 export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType];
+
+export const PricingMode = {
+  EVEN_MONEY: 'EVEN_MONEY',
+  MARKET: 'MARKET',
+} as const;
+export type PricingMode = (typeof PricingMode)[keyof typeof PricingMode];
 
 export const EventStatus = {
   DRAFT: 'DRAFT',
@@ -86,12 +102,17 @@ export const TransactionType = {
   WITHDRAWAL: 'WITHDRAWAL',
   BET_PLACED: 'BET_PLACED',
   BET_CANCELLED: 'BET_CANCELLED',
+  BET_CANCEL_PENALTY: 'BET_CANCEL_PENALTY',
   BET_REFUNDED: 'BET_REFUNDED',
   WIN_PAYOUT: 'WIN_PAYOUT',
   COMMISSION: 'COMMISSION',
   REFERRAL_BONUS: 'REFERRAL_BONUS',
   BONUS: 'BONUS',
   SHOP_PURCHASE: 'SHOP_PURCHASE',
+  WALL_LOCKED: 'WALL_LOCKED',
+  WALL_RELEASED: 'WALL_RELEASED',
+  WALL_PROPOSAL_LOCKED: 'WALL_PROPOSAL_LOCKED',
+  WALL_PROPOSAL_RELEASED: 'WALL_PROPOSAL_RELEASED',
 } as const;
 export type TransactionType =
   (typeof TransactionType)[keyof typeof TransactionType];
@@ -110,6 +131,8 @@ export const ShopItemType = {
   BADGE: 'BADGE',
   AVATAR_FRAME: 'AVATAR_FRAME',
   EMOTE: 'EMOTE',
+  KLASH_STICKER: 'KLASH_STICKER',
+  KLASH_TEXTURE: 'KLASH_TEXTURE',
 } as const;
 export type ShopItemType = (typeof ShopItemType)[keyof typeof ShopItemType];
 
@@ -129,6 +152,14 @@ export const ShopItemCurrency = {
 } as const;
 export type ShopItemCurrency =
   (typeof ShopItemCurrency)[keyof typeof ShopItemCurrency];
+
+export const EmailVerificationPurpose = {
+  LOGIN: 'LOGIN',
+  ACCOUNT_DELETION: 'ACCOUNT_DELETION',
+  EMAIL_CHANGE: 'EMAIL_CHANGE',
+} as const;
+export type EmailVerificationPurpose =
+  (typeof EmailVerificationPurpose)[keyof typeof EmailVerificationPurpose];
 
 export const FriendshipStatus = {
   PENDING: 'PENDING',
@@ -229,6 +260,13 @@ export const NotificationType = {
   FEED_POST_LIKED: 'FEED_POST_LIKED',
   FEED_POST_COMMENTED: 'FEED_POST_COMMENTED',
   FEED_POST_REPOSTED: 'FEED_POST_REPOSTED',
+  STATUS_RESHARED: 'STATUS_RESHARED',
+  WALL_BET_DORMANT: 'WALL_BET_DORMANT',
+  WALL_PROPOSAL_RECEIVED: 'WALL_PROPOSAL_RECEIVED',
+  WALL_PROPOSAL_DECLINED: 'WALL_PROPOSAL_DECLINED',
+  WALL_BET_MATCHED: 'WALL_BET_MATCHED',
+  WALL_BET_COMPLETED: 'WALL_BET_COMPLETED',
+  WALL_BET_RELEASED: 'WALL_BET_RELEASED',
 } as const;
 export type NotificationType =
   (typeof NotificationType)[keyof typeof NotificationType];
@@ -301,6 +339,7 @@ export const MatchSource = {
   CASCADE_UP: 'CASCADE_UP',
   CASCADE_DOWN: 'CASCADE_DOWN',
   CHALLENGE: 'CHALLENGE',
+  WALL: 'WALL',
 } as const;
 export type MatchSource = (typeof MatchSource)[keyof typeof MatchSource];
 
@@ -474,6 +513,7 @@ export const DirectMessageType = {
   VOICE_MESSAGE: 'VOICE_MESSAGE',
   IMAGE: 'IMAGE',
   SYSTEM: 'SYSTEM',
+  STATUS_REPLY: 'STATUS_REPLY',
 } as const;
 export type DirectMessageType =
   (typeof DirectMessageType)[keyof typeof DirectMessageType];
@@ -502,6 +542,49 @@ export const FeedPostType = {
   REPOST: 'REPOST',
 } as const;
 export type FeedPostType = (typeof FeedPostType)[keyof typeof FeedPostType];
+
+export const StatusType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  AUDIO: 'AUDIO',
+  SONIC_STICKER: 'SONIC_STICKER',
+  BET_SHARE: 'BET_SHARE',
+  CHALLENGE_SHARE: 'CHALLENGE_SHARE',
+  POST_SHARE: 'POST_SHARE',
+  EVENT_SHARE: 'EVENT_SHARE',
+  STATUS_RESHARE: 'STATUS_RESHARE',
+  POLL: 'POLL',
+  FLEX: 'FLEX',
+} as const;
+export type StatusType = (typeof StatusType)[keyof typeof StatusType];
+
+export const StatusPrivacy = {
+  FRIENDS: 'FRIENDS',
+  FRIENDS_AND_FOLLOWERS: 'FRIENDS_AND_FOLLOWERS',
+} as const;
+export type StatusPrivacy = (typeof StatusPrivacy)[keyof typeof StatusPrivacy];
+
+export const StatusLifecycle = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED',
+  SCHEDULED: 'SCHEDULED',
+} as const;
+export type StatusLifecycle =
+  (typeof StatusLifecycle)[keyof typeof StatusLifecycle];
+
+export const StatusMuteMode = {
+  MUTED: 'MUTED',
+  HIDDEN: 'HIDDEN',
+} as const;
+export type StatusMuteMode =
+  (typeof StatusMuteMode)[keyof typeof StatusMuteMode];
+
+export const ConversationFolder = {
+  PRIMARY: 'PRIMARY',
+  REQUESTS: 'REQUESTS',
+} as const;
+export type ConversationFolder =
+  (typeof ConversationFolder)[keyof typeof ConversationFolder];
 
 export const AlertRuleType = {
   DAU_DROP: 'DAU_DROP',
@@ -562,6 +645,23 @@ export const SeasonGrantVia = {
 export type SeasonGrantVia =
   (typeof SeasonGrantVia)[keyof typeof SeasonGrantVia];
 
+export const WallBetStatus = {
+  OPEN: 'OPEN',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  RELEASED: 'RELEASED',
+} as const;
+export type WallBetStatus = (typeof WallBetStatus)[keyof typeof WallBetStatus];
+
+export const WallBetProposalStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  EXPIRED: 'EXPIRED',
+} as const;
+export type WallBetProposalStatus =
+  (typeof WallBetProposalStatus)[keyof typeof WallBetProposalStatus];
+
 // === WebSocket (Socket.IO) — noms d’événements ===
 // Source: src/modules/websocket/websocket.types.ts.
 // Les clients DOIVENT référencer ces constantes — jamais de littéraux.
@@ -572,6 +672,7 @@ export const WsEvent = {
   SESSION_REVOKED: 'session:revoked',
   NOTIFICATION_NEW: 'notification:new',
   NOTIFICATION_COUNT: 'notification:count',
+  BET_PLACED: 'bet:placed',
   BET_MATCHED: 'bet:matched',
   BET_STATUS_CHANGED: 'bet:status_changed',
   CHAT_MESSAGE: 'chat:message',
@@ -610,6 +711,9 @@ export const WsEvent = {
   DM_MESSAGE_TRANSCRIBED: 'dm:message_transcribed',
   DM_CONVERSATION_UPDATED: 'dm:conversation_updated',
   DM_UNREAD_COUNT: 'dm:unread_count',
+  DM_REQUEST_COUNT: 'dm:request_count',
+  CHALLENGE_ACCEPTED: 'challenge:accepted',
+  CHALLENGE_DECLINED: 'challenge:declined',
   PRESENCE_UPDATE: 'presence:update',
   PRESENCE_SNAPSHOT: 'presence:snapshot',
   SSTK_CONVERSION_COMPLETE: 'sstk:conversion_complete',
@@ -617,6 +721,12 @@ export const WsEvent = {
   FEED_NEW_POST: 'feed:new_post',
   FEED_REACTION: 'feed:reaction',
   FEED_COMMENT: 'feed:comment',
+  STATUS_NEW: 'status:new',
+  STATUS_VIEWED: 'status:viewed',
+  STATUS_REACTION: 'status:reaction',
+  STATUS_POLL_VOTE: 'status:poll_vote',
+  STATUS_DELETED: 'status:deleted',
+  STATUS_REVEALED: 'status:revealed',
   GROUP_MESSAGE: 'group:message',
   GROUP_MESSAGE_DELETED: 'group:message_deleted',
   GROUP_MESSAGE_PINNED: 'group:message_pinned',
@@ -668,3 +778,177 @@ export type WsClientEvent = (typeof WsClientEvent)[keyof typeof WsClientEvent];
 /** @deprecated Alias de compat émis en doublon du nom canonique —
  * ne pas utiliser pour du neuf. Retrait suivi dans DEPRECATION.md. */
 export const WS_LEGACY_ODDS_UPDATE = 'odds:update';
+
+// === Sous-catégories par thématique (event sourcing/oracles) ===
+// Source de vérité unique — le champ `subcategory` doit être un slug listé ici.
+export const SUBCATEGORIES = {
+  SPORT: [
+    { slug: 'football', labelFr: 'Football', labelEn: 'Football' },
+    {
+      slug: 'football-afrique',
+      labelFr: 'Football Afrique',
+      labelEn: 'African Football',
+    },
+    { slug: 'basketball', labelFr: 'Basketball', labelEn: 'Basketball' },
+    { slug: 'nba', labelFr: 'NBA', labelEn: 'NBA' },
+    { slug: 'tennis', labelFr: 'Tennis', labelEn: 'Tennis' },
+    { slug: 'mma-boxe', labelFr: 'MMA & Boxe', labelEn: 'MMA & Boxing' },
+    { slug: 'f1', labelFr: 'Formule 1', labelEn: 'Formula 1' },
+    { slug: 'nfl', labelFr: 'NFL', labelEn: 'NFL' },
+  ],
+  ESPORTS_GAMING: [
+    { slug: 'lol', labelFr: 'League of Legends', labelEn: 'League of Legends' },
+    { slug: 'cs2', labelFr: 'Counter-Strike 2', labelEn: 'Counter-Strike 2' },
+    { slug: 'dota2', labelFr: 'Dota 2', labelEn: 'Dota 2' },
+    {
+      slug: 'fifa-efootball',
+      labelFr: 'FIFA / eFootball',
+      labelEn: 'FIFA / eFootball',
+    },
+    { slug: 'valorant', labelFr: 'Valorant', labelEn: 'Valorant' },
+  ],
+  CRYPTO: [
+    { slug: 'bitcoin', labelFr: 'Bitcoin', labelEn: 'Bitcoin' },
+    { slug: 'ethereum', labelFr: 'Ethereum', labelEn: 'Ethereum' },
+    { slug: 'altcoins', labelFr: 'Altcoins', labelEn: 'Altcoins' },
+    { slug: 'memecoins', labelFr: 'Memecoins', labelEn: 'Memecoins' },
+  ],
+  BUSINESS: [
+    { slug: 'entreprises', labelFr: 'Entreprises', labelEn: 'Companies' },
+    {
+      slug: 'startups-tech',
+      labelFr: 'Startups & Tech',
+      labelEn: 'Startups & Tech',
+    },
+    {
+      slug: 'economie-afrique',
+      labelFr: 'Économie Afrique',
+      labelEn: 'African Economy',
+    },
+    {
+      slug: 'matieres-premieres',
+      labelFr: 'Matières premières',
+      labelEn: 'Commodities',
+    },
+  ],
+  POLITICS: [
+    { slug: 'elections', labelFr: 'Élections', labelEn: 'Elections' },
+    {
+      slug: 'politique-afrique',
+      labelFr: 'Politique Afrique',
+      labelEn: 'African Politics',
+    },
+    { slug: 'geopolitique', labelFr: 'Géopolitique', labelEn: 'Geopolitics' },
+  ],
+  ENTERTAINMENT: [
+    { slug: 'cinema', labelFr: 'Cinéma', labelEn: 'Cinema' },
+    { slug: 'musique', labelFr: 'Musique', labelEn: 'Music' },
+    { slug: 'awards', labelFr: 'Awards', labelEn: 'Awards' },
+    { slug: 'celebrites', labelFr: 'Célébrités', labelEn: 'Celebrities' },
+    {
+      slug: 'tv-streaming',
+      labelFr: 'TV & Streaming',
+      labelEn: 'TV & Streaming',
+    },
+  ],
+  TECH: [
+    {
+      slug: 'produits-tech',
+      labelFr: 'Produits Tech',
+      labelEn: 'Tech Products',
+    },
+    {
+      slug: 'ia',
+      labelFr: 'Intelligence artificielle',
+      labelEn: 'Artificial Intelligence',
+    },
+    {
+      slug: 'reseaux-sociaux',
+      labelFr: 'Réseaux sociaux',
+      labelEn: 'Social Media',
+    },
+  ],
+  SCIENCE_SPACE: [
+    { slug: 'espace', labelFr: 'Espace', labelEn: 'Space' },
+    {
+      slug: 'ia',
+      labelFr: 'Intelligence artificielle',
+      labelEn: 'Artificial Intelligence',
+    },
+    {
+      slug: 'climat-meteo',
+      labelFr: 'Climat & Météo',
+      labelEn: 'Climate & Weather',
+    },
+  ],
+  CULTURE_SOCIETY: [
+    { slug: 'societe', labelFr: 'Société', labelEn: 'Society' },
+    { slug: 'religion', labelFr: 'Religion', labelEn: 'Religion' },
+    { slug: 'education', labelFr: 'Éducation', labelEn: 'Education' },
+  ],
+  INSOLITE: [
+    { slug: 'records', labelFr: 'Records', labelEn: 'Records' },
+    { slug: 'viral', labelFr: 'Viral', labelEn: 'Viral' },
+    { slug: 'paris-fous', labelFr: 'Paris fous', labelEn: 'Crazy bets' },
+    { slug: 'people', labelFr: 'People', labelEn: 'Celebrities buzz' },
+  ],
+  OTHER: [],
+} as const;
+export type SubcategoryEntry = {
+  slug: string;
+  labelFr: string;
+  labelEn: string;
+};
+/** Tous les slugs de sous-catégories valides, aplatis (validation). */
+export const SUBCATEGORY_SLUGS: readonly string[] = Object.values(SUBCATEGORIES)
+  .flat()
+  .map((s) => s.slug);
+
+// === Origine d'un pari (monde de provenance) ===
+// Source: src/shared/bet-origin.type.ts (union manuscrite, PAS un enum Prisma).
+// Valeur DÉRIVÉE à la lecture par resolveBetOrigin() — aucune colonne ne la stocke.
+export const BetOrigin = {
+  COMMUNITY: 'COMMUNITY',
+  GROUP: 'GROUP',
+  CHALLENGE: 'CHALLENGE',
+  WALL: 'WALL',
+} as const;
+export type BetOrigin = (typeof BetOrigin)[keyof typeof BetOrigin];
+
+// === Sous-ensembles sémantiques (émis / informatifs) ===
+// Propriétés du CODE serveur, non dérivables du schéma. Gardées par
+// src/shared/contracts/contracts-semantics.guard.spec.ts.
+/** Types de notification murale réellement ÉMIS par un chemin serveur. */
+export const WALL_NOTIFICATION_TYPES_EMITTED = [
+  NotificationType.WALL_BET_DORMANT,
+  NotificationType.WALL_PROPOSAL_RECEIVED,
+  NotificationType.WALL_PROPOSAL_DECLINED,
+  NotificationType.WALL_BET_MATCHED,
+] as const;
+/**
+ * Déclarés en base, AUCUN émetteur serveur — NE PAS router, NE PAS câbler
+ * d'écran : rien ne les écrira. Câbler une icône ou une navigation pour
+ * ces valeurs, c'est du code mort qu'aucun outil ne signale.
+ */
+export const WALL_NOTIFICATION_TYPES_DECLARED_ONLY = [
+  NotificationType.WALL_BET_COMPLETED,
+  NotificationType.WALL_BET_RELEASED,
+] as const;
+/**
+ * INFORMATIF : montant réel, AUCUN mouvement de portefeuille. À EXCLURE de
+ * toute somme de transactions dérivant un solde. Oublier `COMMISSION` a
+ * coûté 48 fausses alertes `fatal` en une journée (2026-06-27).
+ */
+export const INFORMATIVE_TRANSACTION_TYPES = [
+  TransactionType.COMMISSION,
+  TransactionType.BET_CANCEL_PENALTY,
+] as const;
+/**
+ * `true` si la ligne déplace réellement un solde.
+ * ⚠️ Type INCONNU ⇒ `true` (prudent) : un client épinglé sur un tag ancien
+ * comptera comme « déplace un solde » un type informatif ajouté APRÈS son
+ * tag. Le retard de version est déplacé, pas supprimé — cette fonction
+ * CONCENTRE le risque en un point, elle ne le referme pas.
+ */
+export const movesWallet = (type: string): boolean =>
+  !(INFORMATIVE_TRANSACTION_TYPES as readonly string[]).includes(type);
