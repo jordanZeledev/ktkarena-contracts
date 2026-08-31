@@ -64,6 +64,33 @@ function empreinteDuCorps(source) {
   return createHash('sha256').update(lignes.slice(i).join('\n').trimEnd()).digest('hex');
 }
 
+/**
+ * Cohérence entre `package.json` et `src/version.ts`.
+ *
+ * ⚠️ Une version écrite à DEUX endroits finit toujours par diverger — c'est le
+ * motif que tout ce chantier a passé son temps à réparer. `CONTRACTS_VERSION`
+ * existe pour qu'un client puisse asserter qu'il n'est pas en retard ; une
+ * constante qui ment sur la version serait pire que pas de constante du tout.
+ */
+function verifierCoherenceVersion() {
+  const versionPaquet = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).version;
+  const source = readFileSync(join(ROOT, 'src', 'version.ts'), 'utf8');
+  const trouve = /export const CONTRACTS_VERSION = '([^']+)'/.exec(source);
+
+  if (!trouve) {
+    return { ok: false, message: "CONTRACTS_VERSION introuvable dans src/version.ts." };
+  }
+  if (trouve[1] !== versionPaquet) {
+    return {
+      ok: false,
+      message:
+        `package.json dit ${versionPaquet}, src/version.ts dit ${trouve[1]}.\n` +
+        '    Bumper l’un sans l’autre publierait une constante qui ment.',
+    };
+  }
+  return { ok: true, version: versionPaquet };
+}
+
 function lireArgs(argv) {
   const positionnels = [];
   const options = {};
@@ -128,6 +155,14 @@ function main() {
   }
 
   console.log(`Réception — candidat : ${candidat}`);
+
+  // 0. Invariant du dépôt : la version ne ment pas.
+  const version = verifierCoherenceVersion();
+  if (!version.ok) {
+    console.error(`✗ version incohérente — ${version.message}`);
+    process.exit(1);
+  }
+  console.log(`✓ version cohérente : ${version.version} (package.json == src/version.ts)`);
 
   // 1. Consommable ?
   const build = compiler(source);
