@@ -50,15 +50,60 @@ Dans le `package.json` du client :
    ```
 3. Le `prepare` script compile automatiquement `dist/` à l'installation.
 
+### ⚠️ Bumper un client — `npm install` seul NE SUFFIT PAS
+
+**Mesuré le 2026-08-31, sur un banc neuf.** Changer la ref dans le `package.json` du client puis
+lancer `npm install` **ne fait rien** : npm considère la contrainte satisfaite par l'entrée du
+lockfile et garde le SHA résolu précédemment.
+
+```bash
+# package.json : #v1.3.0 → #v1.4.0, puis :
+npm install
+#   version reçue : 1.3.0        ← inchangée
+#   lock SHA      : e89b90b…     ← inchangé
+#   dist/         : pas de version.js   ← le nouveau point d'entrée manque
+```
+
+**Ce qui fonctionne :**
+
+```bash
+npm update @ktk/contracts
+# ou, équivalent :
+npm install "github:jordanZeledev/ktkarena-contracts#vX.Y.Z"
+```
+
+**Vérifier ensuite — quatre points, pas un.** Un `npm install` silencieux n'est pas une preuve
+d'installation :
+
+| à vérifier | comment |
+| --- | --- |
+| la ref | `package.json` du client |
+| le SHA résolu | entrée `node_modules/@ktk/contracts` du lockfile |
+| ce qui est sur disque | `ls node_modules/@ktk/contracts/dist/` |
+| ce que le code lit | `CONTRACTS_VERSION` importé de `@ktk/contracts/version` |
+
+> Le dernier est le seul qui prouve quelque chose à l'exécution :
+> ```ts
+> import { CONTRACTS_VERSION } from '@ktk/contracts/version';
+> expect(CONTRACTS_VERSION).toBe('1.4.0'); // échoue quand tu prends du retard
+> ```
+
 ## Flux de mise à jour
 
 1. Modifier `schema.prisma` dans `ktkarena-api`.
 2. `npm run generate:contracts` dans l'API.
-3. Copier `ktkarena-api/src/shared/contracts.ts` → `ktkarena-contracts/src/index.ts` (conserver l'en-tête de ce fichier).
-4. Bump `version` dans `package.json`, commit + tag.
-5. Mettre à jour la ref de version dans les clients.
+3. Copier `ktkarena-api/src/shared/contracts.ts` → `ktkarena-contracts/src/index.ts` (conserver
+   l'en-tête de ce fichier).
+4. **`npm run verify:receivable -- src/index.ts --ledger <ktkarena-api/scripts/contracts-ledger.json>`**
+   — doit être vert AVANT le commit. Il vérifie que le contrat entrant compile sous le `tsconfig`
+   de ce dépôt **et** que son empreinte de corps est bien celle acquittée par l'API.
+5. Bump `version` dans `package.json` **et** `CONTRACTS_VERSION` dans `src/version.ts` — les deux,
+   `verify:receivable` échoue sinon. Puis commit + tag.
+6. Mettre à jour la ref dans les clients (voir l'encadré ci-dessus — `npm update`, pas
+   `npm install`).
 
-**TODO (recommandé) :** ajouter un script `sync:contracts` côté API qui fait l'étape 3 automatiquement.
+**TODO (recommandé) :** ajouter un script `sync:contracts` côté API qui fait l'étape 3
+automatiquement. Les gardes de l'étape 4 existent, la copie de l'étape 3 reste humaine.
 
 ## Migration des clients existants
 

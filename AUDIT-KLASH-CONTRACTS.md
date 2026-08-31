@@ -50,6 +50,24 @@ mort ; `verify:receivable` ici (compilation sous mon `tsconfig` **et** empreinte
 | **F-12** | ✅ **clos** — README corrigé (web consomme en `github:`, pas en `file:`) |
 | **F-13** | 🔴 **ouvert, et désormais INFIXABLE ICI** — la référence pendante à `DEPRECATION.md` vit à `src/index.ts:779`, donc **dans le miroir**. Y toucher ferait diverger l'empreinte. Elle appartient à `ktkarena-api/src/modules/websocket/websocket.types.ts` |
 
+### Trois findings NÉS de la clôture — 2026-08-31, après la migration de `ktkarena-web`
+
+Le bump du premier client a fait tomber ce que 57 jours de gel cachaient. Aucun n'était visible
+avant que quelqu'un emprunte le canal réparé.
+
+| # | finding |
+| --- | --- |
+| **F-14** | 🔴 **`npm install` seul ne bumpe PAS une dépendance git.** Mesuré sur un banc neuf : ref changée `#v1.3.0` → `#v1.4.0`, `npm install` → version reçue **1.3.0**, SHA inchangé, `dist/version.*` absent. npm tient la contrainte pour satisfaite par le lockfile. **`npm update @ktk/contracts` fonctionne.** Documenté dans `README.md`. ⚠️ Ce piège mordra `ktkarena-mobile` et `ktkarena-admin` au premier branchement |
+| **F-15** | 🔴 **Les 5 canaux WS du mur ne sont déclarés NULLE PART dans du code.** `origin/main:src/modules/websocket/websocket.types.ts` ne contient aucun `wall:*` (seule correspondance : `WALLET_BALANCE_UPDATE`), et aucun émetteur n'existe dans `src/`. Le générateur n'a donc rien raté : `wall:posted`, `wall:matched`, `wall:cancelled`, `wall:released`, `wall:proposal_received` **n'existent que dans le prompt markdown**. C'est un cran pire que `WALL_BET_COMPLETED` : celui-là est au moins déclaré, donc le paquet peut dire « déclaré, non émis ». Des canaux jamais déclarés, il ne peut rien dire. **F-15 est A5 qui n'est pas mort** — la surface WS du mur reste intégralement du markdown |
+| **F-16** | 🟡 **`movesWallet` est fail-open — hasard DIVULGUÉ, pas défaut à corriger.** `movesWallet('TYPE_INCONNU') === true`, vérifié à l'exécution chez un consommateur. Conséquence exacte : un type informatif ajouté côté serveur *après* le tag épinglé serait compté comme déplaçant un solde — le bug des 48 fausses alertes, reproduit. **Inverser le défaut n'est pas la solution** (fail-closed omettrait un type réellement mouvant et sous-estimerait le solde) : aucun défaut n'est sûr. **Disposition : aucun changement de code.** Le `.d.ts` livré porte déjà l'avertissement au point d'appel (`dist/index.d.ts:870-876`), donc un développeur le voit au survol ; et un `isKnownTransactionType` serait un producteur sans consommateur — `ktkarena-web` a mesuré qu'il ne somme aucune transaction et a décliné `movesWallet` lui-même pour cette raison. À rouvrir le jour où un client somme réellement |
+
+> **Ce que F-14 et F-15 disent ensemble.** Réparer un canal ne le fait pas emprunter, et un canal
+> emprunté révèle ce qu'un canal gelé taisait. `ktkarena-web` a trouvé trois `Record` exhaustifs qui
+> ne l'étaient plus — dont un qui faisait tomber l'app sur un objet de boutique jamais encore
+> publié. Sa formulation vaut mieux que la mienne : **pendant 57 jours, l'enum gelé garantissait une
+> exhaustivité fausse.** C'est F-08 vu depuis l'autre bord — j'avais décrit le silence chez qui ne
+> bumpe pas ; le prix se paie au bump, en une fois.
+
 > **La leçon que je retiens, et elle n'est pas dans les findings.** Presque chaque défaut de ce
 > chantier était un **document ou une garde qui avait l'air d'autorité et ne l'était pas** : une
 > étape de CI qui ne s'exécutait plus, un `CLAUDE.md` décrivant une pratique inexistante, un README
