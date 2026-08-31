@@ -62,6 +62,13 @@ Dans le `package.json` du client :
 
 ## Migration des clients existants
 
-- `ktkarena-web` : consomme déjà ce package via `file:../ktkarena-contracts` (jour 1).
-- `ktkarena-admin` : peut utiliser `file:` en local, mais préférer la dépendance git dès que le repo est poussé (les builds Vercel n'uploadent que le repo).
+> ⚠️ **État réellement mesuré le 2026-08-31** — cette section décrivait une intention, pas la
+> réalité. Un seul consommateur sur trois est branché.
+
+- `ktkarena-web` : **consomme réellement le paquet**, via une dépendance **git**, pas `file:` —
+  `package.json` épingle `github:jordanZeledev/ktkarena-contracts#v1.3.0` (57 sites d'import dans
+  `src/`). ⚠️ **Toujours sur `v1.3.0` :** un bump vers `v1.4.0` reste à faire de son côté.
+- `ktkarena-admin` : **ne déclare pas le paquet** (zéro occurrence de `@ktk` dans son lockfile). Il a
+  retapé les enums à la main, dans la forme exacte de ce paquet — `src/services/wallApi.ts`,
+  `src/services/transactionsApi.ts`.
 - `ktkarena-mobile` : ⚠️ **NE PAS utiliser `file:../`** — les builds EAS cloud n'uploadent que le repo, une dépendance vers un dossier frère casse le build (vérifié juin 2026, fix/wallet-types-pagination). Deux options : dépendance **git** (`github:<org>/ktkarena-contracts#vX.Y.Z`, fonctionne sur EAS car npm la résout au install), ou conserver une copie vendorée locale synchronisée par script avec commentaire pointant vers la source de vérité (état actuel de `types/wallet.ts`).
