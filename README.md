@@ -24,10 +24,26 @@ Dans le `package.json` du client :
 
 ### En CI / production — via dépendance git (recommandé)
 
-1. Initialiser un repo git ici et le pousser (privé) :
-   ```bash
-   git init && git add . && git commit -m "v1.0.0" && git tag v1.0.0
-   ```
+1. Le dépôt est initialisé et poussé sur
+   `github.com/jordanZeledev/ktkarena-contracts`.
+
+   > ⚠️ **Ce dépôt est PUBLIC, et c'est un choix assumé (2026-08-31).** Cette ligne disait
+   > « le pousser (privé) » jusqu'à cette date, alors que le dépôt était public depuis l'origine :
+   > la doc affirmait le contraire de la réalité, ce qui est précisément la situation où l'on
+   > finit par committer un secret « puisque c'est privé ».
+   >
+   > Décision : **rester public**, pour trois raisons mesurées. Le contenu est non sensible
+   > (des enums — aucune clé, aucune URL à credentials ; l'historique complet, 5 commits, a été
+   > scanné le 2026-08-31 : zéro secret). Passer en privé casserait `npm ci` de `ktkarena-web`
+   > (son lockfile résout en `git+ssh://`) et ses builds Vercel tant qu'une deploy key ou un PAT
+   > ne serait pas configuré. Et les minutes GitHub Actions sont gratuites sur un dépôt public,
+   > facturées sur un privé — c'est ce qui rend une CI possible ici.
+   >
+   > ⚠️ `"private": true` dans `package.json` ne dit **rien** de la visibilité GitHub : il empêche
+   > seulement une publication npm accidentelle. Ne pas le lire comme une garantie de
+   > confidentialité.
+   >
+   > **Conséquence à tenir :** ne jamais committer ici quoi que ce soit qu'on ne publierait pas.
 2. Dans les clients :
    ```json
    "@ktk/contracts": "github:<org>/ktkarena-contracts#v1.0.0"

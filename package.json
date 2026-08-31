@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "verify:receivable": "node scripts/verify-receivable.mjs",
     "prepare": "npm run build"
   },
   "devDependencies": {
