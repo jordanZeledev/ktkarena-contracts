@@ -12,6 +12,25 @@ Toutes les versions sont des **ajouts**. Rien n'a jamais été retiré ni renomm
 
 ---
 
+## v1.5.0 — 2026-09-12
+
+Ajout de `WALLBET_SHARE` à trois enums — `StatusType`, `DirectMessageType`, `GroupMessageType` —
+pour le partage d'une carte klash (api #472, en ligne). Drapeau serveur `wall_share` **fermé** : la
+valeur est publiée ici mais rien ne l'émet encore en production. Rien n'est retiré ni renommé.
+
+> ⚠️ **Silencieux chez un consommateur qui ne bumpe pas** — ni erreur ni avertissement à la
+> compilation ou à l'exécution : `WALLBET_SHARE` est simplement absente, et une comparaison contre
+> cette chaîne serveur tombe dans le repli (voir l'avertissement en tête de ce fichier).
+>
+> **Consommateurs à bumper :**
+>
+> - `ktkarena-web` — dépendance git réelle, encore épinglée sur `v1.3.0` : à rattraper jusqu'à
+>   `v1.5.0` (deux versions de retard, pas une).
+> - `ktkarena-api` — repasser `scripts/contracts-ledger.json` de `unpublished` à `published` une
+>   fois le tag `v1.5.0` posé sur ce dépôt.
+> - `ktkarena-admin` — ne déclare pas le paquet, recopie ses enums à la main dans
+>   `src/services/wallApi.ts` et `src/services/transactionsApi.ts` : mise à jour manuelle.
+
 ## v1.4.0 — 2026-08-31
 
 **La plus grosse version depuis l'origine, et elle porte 57 jours de dette.** Le paquet était figé

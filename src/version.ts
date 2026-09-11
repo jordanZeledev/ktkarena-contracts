@@ -26,4 +26,4 @@
 // échoue donc si les deux ne concordent pas. Bumper l'un sans l'autre bloque.
 
 /** Version de ce paquet. DOIT rester égale au champ `version` de `package.json`. */
-export const CONTRACTS_VERSION = '1.4.0';
+export const CONTRACTS_VERSION = '1.5.0';

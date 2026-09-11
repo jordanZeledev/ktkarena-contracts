@@ -471,6 +471,7 @@ export const GroupMessageType = {
   EVENT_SHARE: 'EVENT_SHARE',
   SONIC_STICKER: 'SONIC_STICKER',
   CHALLENGE: 'CHALLENGE',
+  WALLBET_SHARE: 'WALLBET_SHARE',
 } as const;
 export type GroupMessageType =
   (typeof GroupMessageType)[keyof typeof GroupMessageType];
@@ -514,6 +515,7 @@ export const DirectMessageType = {
   IMAGE: 'IMAGE',
   SYSTEM: 'SYSTEM',
   STATUS_REPLY: 'STATUS_REPLY',
+  WALLBET_SHARE: 'WALLBET_SHARE',
 } as const;
 export type DirectMessageType =
   (typeof DirectMessageType)[keyof typeof DirectMessageType];
@@ -555,6 +557,7 @@ export const StatusType = {
   STATUS_RESHARE: 'STATUS_RESHARE',
   POLL: 'POLL',
   FLEX: 'FLEX',
+  WALLBET_SHARE: 'WALLBET_SHARE',
 } as const;
 export type StatusType = (typeof StatusType)[keyof typeof StatusType];
 
