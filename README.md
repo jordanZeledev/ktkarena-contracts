@@ -111,9 +111,9 @@ automatiquement. Les gardes de l'étape 4 existent, la copie de l'étape 3 reste
 > réalité. Un seul consommateur sur trois est branché.
 
 - `ktkarena-web` : **consomme réellement le paquet**, via une dépendance **git**, pas `file:` —
-  `package.json` épingle `github:jordanZeledev/ktkarena-contracts#v1.3.0` (57 sites d'import dans
-  `src/`). ⚠️ **Toujours sur `v1.3.0` :** `v1.5.0` est disponible (`WALLBET_SHARE`, 2026-09-12) — un
-  bump reste à faire de son côté, en rattrapant aussi `v1.4.0` au passage.
+  `package.json` épingle `github:jordanZeledev/ktkarena-contracts#v1.4.0` (57 sites d'import dans
+  `src/`). ⚠️ **Sur `v1.4.0` (PR web #150) :** `v1.5.0` est disponible (`WALLBET_SHARE`, 2026-09-12) —
+  bump à faire de son côté.
 - `ktkarena-admin` : **ne déclare pas le paquet** (zéro occurrence de `@ktk` dans son lockfile). Il a
   retapé les enums à la main, dans la forme exacte de ce paquet — `src/services/wallApi.ts`,
   `src/services/transactionsApi.ts`.

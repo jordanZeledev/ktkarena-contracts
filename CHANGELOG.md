@@ -24,8 +24,8 @@ valeur est publiée ici mais rien ne l'émet encore en production. Rien n'est re
 >
 > **Consommateurs à bumper :**
 >
-> - `ktkarena-web` — dépendance git réelle, encore épinglée sur `v1.3.0` : à rattraper jusqu'à
->   `v1.5.0` (deux versions de retard, pas une).
+> - `ktkarena-web` — dépendance git réelle, épinglée sur `v1.4.0` (PR web #150) : bumper vers
+>   `v1.5.0`.
 > - `ktkarena-api` — repasser `scripts/contracts-ledger.json` de `unpublished` à `published` une
 >   fois le tag `v1.5.0` posé sur ce dépôt.
 > - `ktkarena-admin` — ne déclare pas le paquet, recopie ses enums à la main dans
